@@ -1,6 +1,13 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
+import { Button, ThemeProvider } from "@mui/material";
+import BasicButtons from "@/components/Button/Button";
+import Navbar from "@/components/Navbar/Navbar";
+import theme from "./theme";
+import Routing from "./routing";
+import createEmotionCache from "@/utils/createEmotionCache";
+import { CacheProvider } from "@emotion/react";
+import Link from "next/link";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -22,7 +29,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Routing children={children} />
       </body>
     </html>
   );
