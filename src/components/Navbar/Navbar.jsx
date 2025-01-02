@@ -67,7 +67,7 @@ function Navbar() {
                 textDecoration: "none",
               }}
             >
-              LOGO
+              LOGO .
             </Typography>
 
             {/* Mobile view - Hamburger Menu */}

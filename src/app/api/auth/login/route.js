@@ -12,21 +12,22 @@ const data = [
 ];
 
 export async function POST(request) {
-  // Add CORS headers
-  const headers = {
+  const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
   };
 
-  // Handle OPTIONS request for CORS preflight
+  // Tangani permintaan OPTIONS (CORS Preflight Request)
   if (request.method === "OPTIONS") {
-    return NextResponse.json({}, { headers });
+    return NextResponse.json({}, { headers: corsHeaders });
   }
 
   try {
+    // Parse data dari request
     const { email, password } = await request.json();
 
+    // Cari user berdasarkan email dan password
     const user = data.find(
       (user) => user.email === email && user.password === password
     );
@@ -37,12 +38,11 @@ export async function POST(request) {
           status: 200,
           message: "Login successfully",
           data: {
-            email: email,
-            password:password
-          }
+            email,
+            password,
+          },
         },
-
-        { headers }
+        { headers: corsHeaders }
       );
     } else {
       return NextResponse.json(
@@ -50,7 +50,7 @@ export async function POST(request) {
           status: 400,
           message: "Incorrect email or password",
         },
-        { headers }
+        { headers: corsHeaders }
       );
     }
   } catch (error) {
@@ -59,7 +59,16 @@ export async function POST(request) {
         status: 500,
         message: "An error occurred while processing the request.",
       },
-      { headers }
+      { headers: corsHeaders }
     );
   }
+}
+
+export async function OPTIONS() {
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  };
+  return NextResponse.json({}, { headers: corsHeaders });
 }
