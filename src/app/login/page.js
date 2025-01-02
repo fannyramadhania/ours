@@ -15,10 +15,11 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/hooks/useAuth";
+import supabase from "@/lib/supabase";
 
 // Skema validasi menggunakan Yup
 const validationSchema = yup.object({
-  email: yup.string().email("Email tidak valid").required("Email wajib diisi"),
+  username: yup.string().required("Username wajib diisi"),
   password: yup
     .string()
     .min(6, "Password harus minimal 6 karakter")
@@ -26,6 +27,7 @@ const validationSchema = yup.object({
 });
 
 const LoginPage = () => {
+
   const { setAuth } = useAuthStore();
   const router = useRouter();
   // Menggunakan useForm dengan yup resolver
@@ -58,12 +60,11 @@ const LoginPage = () => {
       loading: "Process for updating data",
       success: (response) => {
         if (response.status === 200 || response.status === 201) {
-          // Di sini Anda bisa menambahkan logika setelah login berhasil
-          // Contoh: redirect ke halaman dashboard
-          setAuth(response.data)
+       console.log(response);
+          setAuth(response.data.data);
+          router.push("/")
         }
-        console.log(response);
-        setAuth(response.data.data)
+     
 
         return "Login successful";
       },
@@ -99,13 +100,13 @@ const LoginPage = () => {
             sx={{ mt: 1, width: "100%" }}
           >
             <TextField
-              label="Email"
-              type="email"
+              label="username"
+              type="username"
               fullWidth
               margin="normal"
-              {...register("email")}
-              error={!!errors.email}
-              helperText={errors.email?.message}
+              {...register("username")}
+              error={!!errors.username}
+              helperText={errors.username?.message}
               required
             />
             <TextField

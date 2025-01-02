@@ -1,15 +1,5 @@
+import supabase from "@/lib/supabase";
 import { NextResponse } from "next/server";
-
-const data = [
-  {
-    email: "fanny@bob.com",
-    password: "fanny123",
-  },
-  {
-    email: "rehan@bob.com",
-    password: "rehan123",
-  },
-];
 
 export async function POST(request) {
   const corsHeaders = {
@@ -24,42 +14,45 @@ export async function POST(request) {
   }
 
   try {
-    // Parse data dari request
-    const { email, password } = await request.json();
+    const { username, password } = await request.json();
+    const { data, error } = await supabase
+      .from("user") // Ganti dengan nama tabel yang ada di Supabase Anda
+      .select("*")
+      .limit(1)
+      .eq("username", username)
+      .eq("password", password);
+    console.log(data);
 
-    // Cari user berdasarkan email dan password
-    const user = data.find(
-      (user) => user.email === email && user.password === password
-    );
-
-    if (user) {
+    // Periksa apakah data kosong atau tidak ditemukan
+    if (data && data.length > 0) {
       return NextResponse.json(
         {
           status: 200,
           message: "Login successfully",
           data: {
-            email,
+            username,
             password,
           },
         },
-        { headers: corsHeaders }
+        { headers: corsHeaders, status: 200 } // Set status HTTP 200
       );
     } else {
       return NextResponse.json(
         {
           status: 400,
-          message: "Incorrect email or password",
+          message: "Incorrect username or password", // Pesan error jika data kosong
         },
-        { headers: corsHeaders }
+        { headers: corsHeaders, status: 400 } // Set status HTTP 400
       );
     }
   } catch (error) {
+    console.error(error); // Log error jika ada kesalahan lainnya
     return NextResponse.json(
       {
         status: 500,
         message: "An error occurred while processing the request.",
       },
-      { headers: corsHeaders }
+      { headers: corsHeaders, status: 500 } // Set status HTTP 500 untuk error server
     );
   }
 }
