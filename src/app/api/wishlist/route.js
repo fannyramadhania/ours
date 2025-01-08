@@ -9,6 +9,8 @@ const corsHeaders = {
 export async function GET() {
   const { data, error } = await supabase.from("wishlist").select("*");
 
+  console.log(data);
+  
   if (data) {
     return NextResponse.json(
       {

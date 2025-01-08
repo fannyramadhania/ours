@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
-
+const token = "auth-dummy-token"
 export async function POST(request) {
   if (request.method === "OPTIONS") {
     return NextResponse.json({}, { headers: corsHeaders });

@@ -10,7 +10,7 @@ function Wishlist() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["wishlist"], // Query key
     queryFn: () => fetcher("http://localhost:3000/api/wishlist"), // Fetch function
-    enabled:false
+  
   });
 
   console.log(data);
