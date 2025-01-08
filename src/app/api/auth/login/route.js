@@ -22,7 +22,6 @@ export async function POST(request) {
       .eq("password", password);
 
     if (data && data.length > 0) {
-      const token = "dummy-auth-token"; // Token dummy
 
       const response = NextResponse.json(
         {

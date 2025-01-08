@@ -3,7 +3,7 @@ import { useAuthStore } from "./hooks/useAuth";
 
 export function middleware(req) {
   const { cookies } = req;
-  const authToken = cookies.get("authToken");
+  const authToken = cookies.get("authToken") || cookies.get("_vercel_jwt");
 
   if (authToken && authToken.value != "") {
     return NextResponse.next();
