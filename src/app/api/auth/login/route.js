@@ -37,10 +37,11 @@ export async function POST(request) {
       );
 
       // Atur cookie dalam respons menggunakan header `Set-Cookie`
-      response.headers.set(
-        "Set-Cookie",
-        `authToken=${token}; Path=/; HttpOnly; Secure=false; SameSite=Strict`
-      );
+     response.headers.set(
+       "Set-Cookie",
+       `authToken=${token}; Path=/; HttpOnly; Secure=true; SameSite=Strict`
+     );
+
 
       return response;
     } else {
@@ -74,10 +75,11 @@ export async function DELETE() {
     { headers: corsHeaders, status:200 }
   );
 
-  response.headers.set(
-    "Set-Cookie",
-    "authToken=; Path=/; HttpOnly; Secure=false; SameSite=Strict; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
-  );
+ response.headers.set(
+   "Set-Cookie",
+   "authToken=; Path=/; HttpOnly; Secure=true; SameSite=Strict; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+ );
+
 
   return response;
 }
