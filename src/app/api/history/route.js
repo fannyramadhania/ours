@@ -1,73 +1,65 @@
-import { NextRequest, NextResponse } from "next/server";
+import supabase from "@/lib/supabase";
+import { NextResponse } from "next/server";
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+export async function GET() {
+  const { data, error } = await supabase.from("history").select("*");
 
-const data = [
-  {
-    id: 1,
-    destination: "Bali, Indonesia",
-    date: "2024-03-15",
-    duration: "5 days",
-    activities: [
-      "Visiting Tanah Lot Temple",
-      "Surfing at Kuta Beach",
-      "Exploring Ubud Rice Terraces",
-    ],
-    accommodation: "Four Seasons Resort",
-    travelType: "Vacation",
-    cost: 2500000,
-    weather: "Sunny",
-  },
-  {
-    id: 2,
-    destination: "Yogyakarta, Indonesia",
-    date: "2024-02-01",
-    duration: "3 days",
-    activities: [
-      "Borobudur Temple Visit",
-      "Malioboro Shopping",
-      "Merapi Volcano Tour",
-    ],
-    accommodation: "Phoenix Hotel",
-    travelType: "Weekend Trip",
-    cost: 1500000,
-    weather: "Cloudy",
-  },
-  {
-    id: 3,
-    destination: "Raja Ampat, Indonesia",
-    date: "2023-12-20",
-    duration: "7 days",
-    activities: ["Diving", "Island Hopping", "Snorkeling"],
-    accommodation: "Papua Paradise Eco Resort",
-    travelType: "Adventure",
-    cost: 5000000,
-    weather: "Sunny",
-  },
-];
-export async function GET(params) {
-  const { searchParams } = new URL(params.url);
-  const id = searchParams.get("id");
-  console.log(id);
-
-  if (id) {
-    const resultData = data.find((item) => item.id === Number(id));
-    if (resultData) {
-      return NextResponse.json({
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  };
+  if (data) {
+    return NextResponse.json(
+      {
         status: 200,
         message: "Successfully",
-        data: data.find((item) => item.id === Number(id)),
-      });
-    } else {
-      return NextResponse.json({
-        status: 400,
-        message: "Not Found",
-        data: [],
-      });
-    }
+        data: data,
+      },
+      { headers: corsHeaders, status: 200 }
+    );
+  } else {
+    return NextResponse.json(
+      {
+        status: 500,
+        message: "An error occurred while processing the request.",
+      },
+      { headers: corsHeaders, status: 500 }
+    );
+  }
+}
+
+export async function POST(request) {
+  const formData = await request.formData();
+  const destination = formData.get("destination");
+  const date = formData.get("date");
+  const photo = formData.get("photo");
+  console.log(destination);
+  console.log(date);
+  console.log(photo);
+  const dateConvert = new Date(date);
+
+  const { error } = await supabase.from("history").insert({
+    destination: destination,
+    date: dateConvert.toISOString().split("T")[0],
+    photo: photo,
+  });
+
+  console.log(error);
+
+  if (!error) {
+    return NextResponse.json({
+      status: 201,
+      message: "Successfully",
+    });
   } else {
     return NextResponse.json({
-      status: 200,
-      message: "Successfully",
-      data: data,
+      status: 500,
+      message: "An error occurred while processing the request.",
     });
   }
 }

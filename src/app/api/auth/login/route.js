@@ -1,15 +1,13 @@
-
 import supabase from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
-export async function POST(request) {
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  };
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
 
-  // Tangani permintaan OPTIONS (CORS Preflight Request)
+export async function POST(request) {
   if (request.method === "OPTIONS") {
     return NextResponse.json({}, { headers: corsHeaders });
   }
@@ -17,16 +15,16 @@ export async function POST(request) {
   try {
     const { username, password } = await request.json();
     const { data, error } = await supabase
-      .from("user") // Ganti dengan nama tabel yang ada di Supabase Anda
+      .from("user")
       .select("*")
       .limit(1)
       .eq("username", username)
       .eq("password", password);
-    console.log(data);
 
-    // Periksa apakah data kosong atau tidak ditemukan
     if (data && data.length > 0) {
-      return NextResponse.json(
+      const token = "dummy-auth-token"; // Token dummy
+
+      const response = NextResponse.json(
         {
           status: 200,
           message: "Login successfully",
@@ -35,34 +33,55 @@ export async function POST(request) {
             password,
           },
         },
-        { headers: corsHeaders, status: 200 } // Set status HTTP 200
+        { headers: corsHeaders ,status:200}
       );
+
+      // Atur cookie dalam respons menggunakan header `Set-Cookie`
+      response.headers.set(
+        "Set-Cookie",
+        `authToken=${token}; Path=/; HttpOnly; Secure=false; SameSite=Strict`
+      );
+
+      return response;
     } else {
       return NextResponse.json(
         {
           status: 400,
-          message: "Incorrect username or password", // Pesan error jika data kosong
+          message: "Incorrect username or password",
         },
-        { headers: corsHeaders, status: 400 } // Set status HTTP 400
+        { headers: corsHeaders,status:400 }
       );
     }
   } catch (error) {
-    console.error(error); // Log error jika ada kesalahan lainnya
+    console.error(error);
     return NextResponse.json(
       {
         status: 500,
         message: "An error occurred while processing the request.",
       },
-      { headers: corsHeaders, status: 500 } // Set status HTTP 500 untuk error server
+      { headers: corsHeaders }
     );
   }
 }
 
+export async function DELETE() {
+  // Membuat respons untuk menghapus cookie
+  const response = NextResponse.json(
+    {
+      status: 200,
+      message: "Logout successful",
+    },
+    { headers: corsHeaders, status:200 }
+  );
+
+  response.headers.set(
+    "Set-Cookie",
+    "authToken=; Path=/; HttpOnly; Secure=false; SameSite=Strict; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+  );
+
+  return response;
+}
+
 export async function OPTIONS() {
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  };
   return NextResponse.json({}, { headers: corsHeaders });
 }

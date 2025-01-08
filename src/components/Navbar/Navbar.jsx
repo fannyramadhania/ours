@@ -17,6 +17,11 @@ import BasicButtons from "../Button/Button";
 import { NoSsr } from "@mui/material";
 import { Router, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuthStore } from "@/hooks/useAuth";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { Logout } from "@mui/icons-material";
+import { KeyboardBackspace } from "@mui/icons-material";
 
 // For mobile and tablet screen sizes
 const pages = ["History", "Wishlist", "Picture"];
@@ -25,7 +30,39 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const router=useRouter()
+  const router = useRouter();
+  const { clearUser } = useAuthStore();
+  const logoutFunc = async (data) => {
+    console.log("Data login:", data);
+
+    let config = {
+      method: "delete",
+      maxBodyLength: Infinity,
+      url: `http://localhost:3000/api/auth/login`,
+    };
+
+    // Buat promise request
+    const requestPromise = axios(config);
+
+    toast.promise(requestPromise, {
+      loading: "Process for logout",
+      success: (response) => {
+        if (response.status === 200 || response.status === 201) {
+          clearUser();
+          router.push("/login");
+        }
+
+        return "Logout successful";
+      },
+      error: (error) => {
+        console.log("error", error);
+        return (
+          error?.response?.data?.message ||
+          "Something went wrong, please contact our team"
+        );
+      },
+    });
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -42,113 +79,43 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
-
-
   return (
     <>
       <NoSsr />
-      <AppBar position="static">
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            {/* Logo for Desktop view */}
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              LOGO .
-            </Typography>
+      <div className="relative">
+        {/* SVG background wave */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 320"
+          className="block md:hidden"
+        >
+          <path
+            fill="#FFDFDF"
+            fillOpacity="1"
+            d="M0,224L80,192C160,160,320,96,480,101.3C640,107,800,181,960,202.7C1120,224,1280,192,1360,176L1440,160L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"
+          ></path>
+        </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 320"
+          className="hidden md:block"
+        >
+          <path
+            fill="#FFDFDF"
+            fillOpacity="1"
+            d="M0,64L80,85.3C160,107,320,149,480,149.3C640,149,800,107,960,85.3C1120,64,1280,64,1360,64L1440,64L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"
+          ></path>
+        </svg>
+        <Link href={"/"}>
+          <KeyboardBackspace className="w-9 absolute top-4 left-4 text-gray-600 hover:text-black cursor-pointer" />
+        </Link>
 
-            {/* Mobile view - Hamburger Menu */}
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{ display: { xs: "block", md: "none" } }}
-              >
-                {pages.map((page, index) => (
-                  <MenuItem key={index} onClick={handleCloseNavMenu}>
-                    <Typography sx={{ textAlign: "center" }}>{page}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
+        {/* Logout icon */}
 
-            {/* Logo for Mobile view */}
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
-              sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              LOGO
-            </Typography>
-
-            {/* Menu Items - Centered */}
-            <Box
-              sx={{
-                flexGrow: 1,
-                display: { xs: "none", md: "flex" },
-                justifyContent: "center",
-              }}
-            >
-              {pages.map((page, index) => (
-                <Link href={"/" + page.toLowerCase()} key={index}>
-                  <BasicButtons text={page} context={"buttonText"} />
-                </Link>
-              ))}
-            </Box>
-
-            {/* User Avatar and Log In Button */}
-            <Link href={"/login"} >
-              <BasicButtons text={"Log in"} context={"buttonMode"} />
-            </Link>
-          </Toolbar>
-        </Container>
-      </AppBar>
+        <div onClick={() => logoutFunc()}>
+          <Logout className="w-8 absolute top-4 right-4 text-red-500 hover:text-black cursor-pointer" />
+        </div>
+      </div>
     </>
   );
 }

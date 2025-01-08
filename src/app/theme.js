@@ -5,7 +5,7 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#E9ECEF", // warna biru
+      main: "#AEDEFC", // warna biru
     },
     secondary: {
       main: "#F96E2A", // warna ungu

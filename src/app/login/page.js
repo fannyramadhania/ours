@@ -28,7 +28,7 @@ const validationSchema = yup.object({
 
 const LoginPage = () => {
 
-  const { setAuth } = useAuthStore();
+  const { setUser } = useAuthStore();
   const router = useRouter();
   // Menggunakan useForm dengan yup resolver
   const {
@@ -61,7 +61,7 @@ const LoginPage = () => {
       success: (response) => {
         if (response.status === 200 || response.status === 201) {
        console.log(response);
-          setAuth(response.data.data);
+          setUser(response.data.data);
           router.push("/")
         }
      
@@ -100,7 +100,7 @@ const LoginPage = () => {
             sx={{ mt: 1, width: "100%" }}
           >
             <TextField
-              label="username"
+              label="Username"
               type="username"
               fullWidth
               margin="normal"

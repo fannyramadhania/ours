@@ -3,7 +3,7 @@ import * as React from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import { blue, deepOrange, grey, purple } from "@mui/material/colors";
+import { blue, deepOrange, grey, purple, red } from "@mui/material/colors";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color:grey[800],
@@ -14,12 +14,13 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 const ColorButton2 = styled(Button)(({ theme }) => ({
-  color: theme.palette.getContrastText(blue[500]),
-  backgroundColor: blue[500],
+  color: theme.palette.getContrastText(red[500]),
+  backgroundColor: red[700],
   "&:hover": {
-    backgroundColor: blue[700],
+    backgroundColor: red[700],
   },
 }));
+
 export default function BasicButtons({ text, context }) {
 
   return context == "buttonText" ? (
