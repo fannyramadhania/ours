@@ -17,10 +17,15 @@ const createResponseWithCookie = (body, status = 200, includeToken = true) => {
   });
 
   if (includeToken) {
-    response.headers.set(
-      "Set-Cookie",
-      `authToken=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=86400`
-    );
+    response.cookies.set({
+      name: "authToken",
+      value: token,
+      path: "/",
+      secure: true,
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24, // 24 jam dalam detik
+    });
   }
 
   return response;
@@ -94,14 +99,27 @@ export async function DELETE() {
     }
   );
 
-  response.headers.set(
-    "Set-Cookie",
-    "authToken=; Path=/; HttpOnly; Secure; SameSite=Strict; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
-  );
+  // Hapus cookie dengan mengatur expires ke masa lalu
+  response.cookies.set({
+    name: "authToken",
+    value: "",
+    path: "/",
+    secure: true,
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: 0, // Expired immediately
+  });
 
   return response;
 }
 
 export async function OPTIONS() {
-  return NextResponse.json({}, { headers: corsHeaders });
+  // Handle preflight request
+  return NextResponse.json(
+    {},
+    {
+      headers: corsHeaders,
+      status: 200,
+    }
+  );
 }
