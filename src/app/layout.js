@@ -29,6 +29,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-basicWhite`}
       >
+        <p>Ini stage preview</p>
         <Routing children={children} />
       </body>
     </html>
