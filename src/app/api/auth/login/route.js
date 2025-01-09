@@ -2,14 +2,13 @@ import supabase from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": "https://your-frontend-domain.com", // Sesuaikan domain Anda
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-const token = "auth-dummy-token";
+const token = "auth-dummy-token"; // Pastikan token ini dibuat dengan aman
 
-// Helper function untuk membuat response dengan cookie
 const createResponseWithCookie = (body, status = 200, includeToken = true) => {
   const response = NextResponse.json(body, {
     headers: corsHeaders,
@@ -21,10 +20,10 @@ const createResponseWithCookie = (body, status = 200, includeToken = true) => {
       name: "authToken",
       value: token,
       path: "/",
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       sameSite: "lax",
-      maxAge: 60 * 60 * 24, // 24 jam dalam detik
+      maxAge: 60 * 60 * 24,
     });
   }
 
@@ -35,6 +34,7 @@ export async function POST(request) {
   try {
     const { username, password } = await request.json();
 
+    // Validasi data input
     if (!username || !password) {
       return createResponseWithCookie(
         {
@@ -46,15 +46,17 @@ export async function POST(request) {
       );
     }
 
+    // Query untuk mendapatkan pengguna berdasarkan username
     const { data, error } = await supabase
       .from("user")
       .select("*")
       .limit(1)
       .eq("username", username)
-      .eq("password", password);
+      .eq("password", password); // Cocokkan langsung password
 
     if (error) throw error;
 
+    // Jika pengguna ditemukan
     if (data?.length > 0) {
       return createResponseWithCookie({
         status: 200,
@@ -66,6 +68,7 @@ export async function POST(request) {
       });
     }
 
+    // Jika username atau password salah
     return createResponseWithCookie(
       {
         status: 400,
@@ -87,6 +90,7 @@ export async function POST(request) {
   }
 }
 
+
 export async function DELETE() {
   const response = NextResponse.json(
     {
@@ -99,7 +103,6 @@ export async function DELETE() {
     }
   );
 
-  // Hapus cookie dengan mengatur expires ke masa lalu
   response.cookies.set({
     name: "authToken",
     value: "",
@@ -107,14 +110,13 @@ export async function DELETE() {
     secure: true,
     httpOnly: true,
     sameSite: "lax",
-    maxAge: 0, // Expired immediately
+    expires: new Date(0), // Kompatibilitas tambahan
   });
 
   return response;
 }
 
 export async function OPTIONS() {
-  // Handle preflight request
   return NextResponse.json(
     {},
     {
