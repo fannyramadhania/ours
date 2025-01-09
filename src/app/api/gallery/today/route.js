@@ -1,5 +1,10 @@
 import supabase from "@/lib/supabase";
 import { NextResponse } from "next/server";
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
 
 export async function GET() {
   try {
@@ -23,12 +28,15 @@ export async function GET() {
       status: 200,
       message: "Successfully fetched data for today",
       data: filteredData,
-    });
+    },{headers:corsHeaders} );
   } catch (error) {
-    return NextResponse.json({
-      status: 500,
-      message: "Failed to fetch data",
-      error: error.message,
-    });
+    return NextResponse.json(
+      {
+        status: 500,
+        message: "Failed to fetch data",
+        error: error.message,
+      },
+      { headers: corsHeaders }
+    );
   }
 }
