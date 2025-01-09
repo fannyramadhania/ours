@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Button, ThemeProvider } from "@mui/material";
+import { Button, NoSsr, ThemeProvider } from "@mui/material";
 import BasicButtons from "@/components/Button/Button";
 import Navbar from "@/components/Navbar/Navbar";
 import theme from "./theme";
