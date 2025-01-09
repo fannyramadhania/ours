@@ -3,14 +3,11 @@ import { NextResponse } from "next/server";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 const token = "auth-dummy-token"
 export async function POST(request) {
-  if (request.method === "OPTIONS") {
-    return NextResponse.json({}, { headers: corsHeaders });
-  }
 
   try {
     const { username, password } = await request.json();
@@ -83,6 +80,4 @@ export async function DELETE() {
   return response;
 }
 
-export async function OPTIONS() {
-  return NextResponse.json({}, { headers: corsHeaders });
-}
+
