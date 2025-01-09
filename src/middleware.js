@@ -12,17 +12,21 @@ export function middleware(request) {
     return NextResponse.redirect(loginUrl);
   }
 
+  // Mengecek apakah lingkungan adalah production atau development
   const isProduction = process.env.NODE_ENV === "production";
 
   const response = NextResponse.next();
+
+  // Mengatur cookie dengan konfigurasi yang sesuai
   response.cookies.set({
     name: "authToken",
     value: authToken.value,
     path: "/",
-    secure: isProduction,
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24,
+    secure: isProduction, // hanya secure di production (Vercel)
+    httpOnly: true, // agar hanya bisa diakses melalui server
+    sameSite: "lax", // sama seperti sebelumnya, memungkinkan pengiriman cookie pada beberapa request lintas origin
+    maxAge: 60 * 60 * 24, // 1 hari
+    domain: isProduction ? ".vercel.app" : "localhost", // Tentukan domain untuk vercel atau localhost
   });
 
   return response;
