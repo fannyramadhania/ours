@@ -3,14 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import BasicModal from "@/components/Modal/Modal";
 import TableWishlist from "./compoenent/TableWishlist";
 
-
-
 function Wishlist() {
   // Use React Query's useQuery hook to fetch data
   const { data, isLoading, error } = useQuery({
     queryKey: ["wishlist"], // Query key
-    queryFn: () => fetcher("http://localhost:3000/api/wishlist"), // Fetch function
-  
+    queryFn: () => fetcher(`${process.env.NEXT_PUBLIC_API_URL}/api/wishlist`), // Fetch function
   });
 
   console.log(data);
@@ -26,7 +23,7 @@ function Wishlist() {
 
   return (
     <>
-     <p>coming soon</p>
+      <p>coming soon</p>
     </>
   );
 }

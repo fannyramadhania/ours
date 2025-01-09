@@ -19,7 +19,7 @@ function Picture() {
   // Updated useQuery hook with the object syntax
   const { data, isLoading, error } = useQuery({
     queryKey: ["gallery"], // Query key should be an array or string
-    queryFn: () => fetcher("http://localhost:3000/api/gallery"),
+    queryFn: () => fetcher(`${process.env.NEXT_PUBLIC_API_URL}/api/gallery`),
   });
 
   const [showModal, setShowModal] = useState(false);

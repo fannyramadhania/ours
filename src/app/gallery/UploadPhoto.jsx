@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 const FileUpload = ({ close }) => {
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
- const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
 
@@ -38,7 +38,7 @@ const FileUpload = ({ close }) => {
     // Konfigurasi request axios
     let config = {
       method: "post",
-      url: `http://localhost:3000/api/gallery`,
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/gallery`,
       data: formData, // Menggunakan formData untuk mengirim file
     };
 
@@ -51,7 +51,7 @@ const FileUpload = ({ close }) => {
       success: (response) => {
         if (response.status === 200 || response.status === 201) {
           console.log(response);
-            queryClient.invalidateQueries(["gallery"]);
+          queryClient.invalidateQueries(["gallery"]);
           close();
         }
         return "Upload successful"; // Pesan sukses untuk toast

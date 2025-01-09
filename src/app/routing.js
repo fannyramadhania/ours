@@ -12,12 +12,11 @@ const clientSideEmotionCache = createEmotionCache();
 export default function Routing({ children }) {
   const pathname = usePathname();
   const isLoginPage = pathname === "/login";
-  console.log(pathname);
+  console.log(process.env.NEXT_PUBLIC_API_URL);
   const queryClient = new QueryClient(); // Create the QueryClient instance
 
   return (
     <>
-      
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <Toaster />

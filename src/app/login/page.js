@@ -27,7 +27,6 @@ const validationSchema = yup.object({
 });
 
 const LoginPage = () => {
-
   const { setUser } = useAuthStore();
   const router = useRouter();
   // Menggunakan useForm dengan yup resolver
@@ -46,7 +45,7 @@ const LoginPage = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: `http://localhost:3000/api/auth/login`,
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -60,11 +59,10 @@ const LoginPage = () => {
       loading: "Process for updating data",
       success: (response) => {
         if (response.status === 200 || response.status === 201) {
-       console.log(response);
+          console.log(response);
           setUser(response.data.data);
-          router.push("/")
+          router.push("/");
         }
-     
 
         return "Login successful";
       },

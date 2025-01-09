@@ -29,8 +29,8 @@ const HistoryForm = ({ close }) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["galleryToday"], // Query key
     queryFn: () =>
-      fetch("http://localhost:3000/api/gallery/today").then((res) =>
-        res.json()
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/gallery/today`).then(
+        (res) => res.json()
       ), // Fetch function
   });
 
@@ -61,7 +61,7 @@ const HistoryForm = ({ close }) => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: `http://localhost:3000/api/history`,
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/history`,
       data: formDataObject,
     };
 
@@ -116,7 +116,6 @@ const HistoryForm = ({ close }) => {
             marginTop: 8,
           }}
         >
-         
           <Box
             component="form"
             onSubmit={handleSubmit(onSubmit)}

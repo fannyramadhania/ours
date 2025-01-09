@@ -38,7 +38,7 @@ function Navbar() {
     let config = {
       method: "delete",
       maxBodyLength: Infinity,
-      url: `http://localhost:3000/api/auth/login`,
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
     };
 
     // Buat promise request

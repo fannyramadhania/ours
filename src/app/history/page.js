@@ -11,7 +11,7 @@ export default function History() {
   // Use React Query's useQuery hook to fetch data
   const { data, isLoading, error } = useQuery({
     queryKey: ["history"], // Query key for cache
-    queryFn: () => fetcher("http://localhost:3000/api/history"), // Fetch function
+    queryFn: () => fetcher(`${process.env.NEXT_PUBLIC_API_URL}/api/history`), // Fetch function
   });
 
   const [showModal, setShowModal] = useState(false);

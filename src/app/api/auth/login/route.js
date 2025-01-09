@@ -42,7 +42,7 @@ export async function POST(request) {
           message: "Username and password are required",
         },
         400,
-        false
+        true
       );
     }
 
@@ -75,7 +75,7 @@ export async function POST(request) {
         message: "Incorrect username or password",
       },
       400,
-      false
+      true
     );
   } catch (error) {
     console.error("Login error:", error);
@@ -85,10 +85,11 @@ export async function POST(request) {
         message: "An error occurred while processing the request.",
       },
       500,
-      false
+      true
     );
   }
 }
+
 
 export async function DELETE() {
   const response = NextResponse.json(
