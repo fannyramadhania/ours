@@ -2,7 +2,7 @@ import supabase from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "https://your-frontend-domain.com", // Sesuaikan domain Anda
+  "Access-Control-Allow-Origin": "*", // Sesuaikan domain Anda
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
