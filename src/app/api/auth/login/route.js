@@ -36,7 +36,22 @@ const createResponseWithCookie = (body, status = 200, includeToken = true) => {
 // Endpoint POST untuk login
 export async function POST(request) {
   try {
-    const { username, password } = await request.json();
+    // Pastikan request bisa di-parse sebagai JSON
+    let username, password;
+    try {
+      const body = await request.json();
+      username = body.username;
+      password = body.password;
+    } catch (e) {
+      return createResponseWithCookie(
+        {
+          status: 400,
+          message: "Invalid request format - JSON required",
+        },
+        400,
+        true
+      );
+    }
 
     // Validasi data input
     if (!username || !password) {
@@ -50,50 +65,89 @@ export async function POST(request) {
       );
     }
 
-    // Query untuk mendapatkan pengguna berdasarkan username dan password
+    // Validasi format input
+    if (typeof username !== "string" || typeof password !== "string") {
+      return createResponseWithCookie(
+        {
+          status: 400,
+          message: "Username and password must be strings",
+        },
+        400,
+        true
+      );
+    }
+
+    // Query ke database dengan proper error handling
     const { data, error } = await supabase
       .from("user")
-      .select("*")
+      .select("id, username") // Hanya select field yang diperlukan
+      .eq("username", username.trim())
+      .eq("password", password.trim())
       .limit(1)
-      .eq("username", username)
-      .eq("password", password); // Periksa username dan password
+      .single(); // Gunakan single() untuk mendapatkan object langsung
 
-    if (error) throw error;
+    // Handle specific Supabase errors
+    if (error) {
+      console.error("Database error:", error);
 
-    // Jika pengguna ditemukan
-    if (data?.length > 0) {
+      if (error.code === "PGRST116") {
+        return createResponseWithCookie(
+          {
+            status: 404,
+            message: "User not found",
+          },
+          404,
+          true
+        );
+      }
+
+      return createResponseWithCookie(
+        {
+          status: 500,
+          message: "Database error occurred",
+        },
+        500,
+        true
+      );
+    }
+
+    // Jika data ditemukan
+    if (data) {
       return createResponseWithCookie({
         status: 200,
         message: "Login successful",
         data: {
-          username,
-          userId: data[0].id,
+          username: data.username,
+          userId: data.id,
         },
       });
     }
 
-    // Jika username atau password salah
+    // Jika tidak ada data yang cocok
     return createResponseWithCookie(
       {
-        status: 400,
-        message: "Incorrect username or password",
+        status: 401,
+        message: "Invalid credentials",
       },
-      400,
+      401,
       true
     );
   } catch (error) {
+    // Log error untuk debugging
     console.error("Login error:", error);
+
     return createResponseWithCookie(
       {
         status: 500,
-        message: "An error occurred while processing the request.",
+        message: "Internal server error",
+        error:
+          process.env.NODE_ENV === "development" ? error.message : undefined,
       },
       500,
       true
     );
   }
 }
-
 // Endpoint DELETE untuk logout
 export async function DELETE() {
   const response = NextResponse.json(
