@@ -84,28 +84,7 @@ function Navbar() {
       <NoSsr />
       <div className="relative">
         {/* SVG background wave */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1440 320"
-          className="block md:hidden"
-        >
-          <path
-            fill="#FFDFDF"
-            fillOpacity="1"
-            d="M0,224L80,192C160,160,320,96,480,101.3C640,107,800,181,960,202.7C1120,224,1280,192,1360,176L1440,160L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"
-          ></path>
-        </svg>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1440 320"
-          className="hidden md:block"
-        >
-          <path
-            fill="#FFDFDF"
-            fillOpacity="1"
-            d="M0,64L80,85.3C160,107,320,149,480,149.3C640,149,800,107,960,85.3C1120,64,1280,64,1360,64L1440,64L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"
-          ></path>
-        </svg>
+       
         <Link href={"/"}>
           <KeyboardBackspace className="w-9 absolute top-4 left-4 text-gray-600 hover:text-black cursor-pointer" />
         </Link>

@@ -7,6 +7,11 @@ import {
   Typography,
   Container,
   NoSsr,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,7 +21,9 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/hooks/useAuth";
 import supabase from "@/lib/supabase";
-
+import logo from "../../assets/img/logo.jpg";
+import { Visibility } from "@mui/icons-material";
+import { VisibilityOff } from "@mui/icons-material";
 // Skema validasi menggunakan Yup
 const validationSchema = yup.object({
   username: yup.string().required("Username wajib diisi"),
@@ -29,6 +36,17 @@ const validationSchema = yup.object({
 const LoginPage = () => {
   const { setUser } = useAuthStore();
   const router = useRouter();
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (event) => {
+    event.preventDefault();
+  };
   // Menggunakan useForm dengan yup resolver
   const {
     register,
@@ -76,10 +94,11 @@ const LoginPage = () => {
     });
   };
 
+  console.log(logo);
+
   return (
     <>
-      {" "}
-      <NoSsr />
+      <NoSsr/>
       <Container component="main" maxWidth="xs">
         <Box
           sx={{
@@ -89,14 +108,16 @@ const LoginPage = () => {
             marginTop: 8,
           }}
         >
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
+          <img src={logo?.src} className="w-44" />
+
           <Box
             component="form"
+            className=""
             onSubmit={handleSubmit(onSubmit)}
             sx={{ mt: 1, width: "100%" }}
           >
+            <p className="text-newMain font-bold text-xl">Login</p>
+            <p className="text-gray-400">Please enter username and password</p>
             <TextField
               label="Username"
               type="username"
@@ -104,24 +125,46 @@ const LoginPage = () => {
               margin="normal"
               {...register("username")}
               error={!!errors.username}
-              helperText={errors.username?.message}
               required
             />
-            <TextField
-              label="Password"
-              type="password"
-              fullWidth
-              margin="normal"
-              {...register("password")}
-              error={!!errors.password}
-              helperText={errors.password?.message}
-              required
-            />
+
+            <FormControl fullWidth variant="outlined" className="mt-4 mb-6">
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                label="Password"
+                fullWidth
+                margin="normal"
+                id="outlined-adornment-password"
+                {...register("password")}
+                error={!!errors.password}
+                required
+                type={showPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={
+                        showPassword
+                          ? "hide the password"
+                          : "display the password"
+                      }
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      onMouseUp={handleMouseUpPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
+              color="newMain"
               sx={{ mt: 3, mb: 2 }}
             >
               Login

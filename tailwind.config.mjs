@@ -14,6 +14,7 @@ export default {
         pinkYoung: "#FFDFDF",
         basicWhite: "#FFF6F6",
         basicBlue: "#AEDEFC",
+        newMain: "#87a8cf",
       },
     },
   },

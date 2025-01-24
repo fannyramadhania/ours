@@ -1,11 +1,11 @@
 // theme.js
-"use client"
+"use client";
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#AEDEFC", // warna biru
+      main: "#1B374B", // warna biru
     },
     secondary: {
       main: "#F96E2A", // warna ungu
@@ -24,6 +24,9 @@ const theme = createTheme({
     },
     tosca: {
       main: "#ffca28", // warna kuning
+    },
+    newMain: {
+      main: "#87a8cf",
     },
   },
   typography: {

@@ -27,8 +27,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-basicWhite`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
       >
+           <NoSsr />
         <Routing children={children} />
       </body>
     </html>

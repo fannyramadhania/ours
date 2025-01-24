@@ -28,7 +28,7 @@ export default function TimeLine({ dataHistory }) {
               {historyData?.destination}
               <div className="">
                 <CalendarMonth className="mr-2" />
-                {format(parseISO(historyData?.created_at), "yyyy-MM-dd")}
+                {format(parseISO(historyData?.date), "yyyy-MM-dd")}
               </div>
               <img
                 src={historyData?.photo}
