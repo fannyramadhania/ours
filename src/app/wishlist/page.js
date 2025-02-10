@@ -2,6 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import BasicModal from "@/components/Modal/Modal";
 import TableWishlist from "./compoenent/TableWishlist";
+import { fetcher } from "@/lib/fetcher";
 
 function Wishlist() {
   // Use React Query's useQuery hook to fetch data

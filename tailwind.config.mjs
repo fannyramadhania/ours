@@ -10,8 +10,7 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        pinkOld: "#F875AA",
-        pinkYoung: "#FFDFDF",
+       
         basicWhite: "#FFF6F6",
         basicBlue: "#AEDEFC",
         newMain: "#87a8cf",

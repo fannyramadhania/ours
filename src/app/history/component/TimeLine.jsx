@@ -21,12 +21,12 @@ export default function TimeLine({ dataHistory }) {
               <TimelineDot />
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>
+            <TimelineContent className="text-black">
               {/* index 0 -> kanan
               index 1-> kiri */}
               <Place/>
               {historyData?.destination}
-              <div className="">
+              <div className="text-black">
                 <CalendarMonth className="mr-2" />
                 {format(parseISO(historyData?.date), "yyyy-MM-dd")}
               </div>

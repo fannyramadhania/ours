@@ -8,7 +8,7 @@ export default function StandardImageList({ dataImg }) {
     <>
       
       <div className="container mx-auto px-4 mt-8">
-        <p className="font-bold text-xl mb-4">Gallery</p> 
+        <p className="font-bold text-xl mb-4 text-black">Gallery</p> 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {dataImg?.map(
             (item, index) =>

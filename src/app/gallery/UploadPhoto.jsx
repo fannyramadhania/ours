@@ -69,8 +69,8 @@ const FileUpload = ({ close }) => {
   return (
     <>
       <label htmlFor="file-upload">
-        <div className=" mx-auto p-6 space-y-6 bg-pinkYoung rounded-lg shadow-lg hover:bg-pink-100 cursor-pointer">
-          <h2 className="text-xl font-semibold text-center cursor-pointer ">
+        <div className=" mx-auto p-6 space-y-6 bg-gray-100 rounded-lg shadow-lg  cursor-pointer">
+          <h2 className="text-xl font-semibold text-center text-black cursor-pointer ">
             Upload Photo
           </h2>
 
@@ -78,7 +78,7 @@ const FileUpload = ({ close }) => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="size-8 m-auto block"
+            className="size-8 m-auto block text-black"
           >
             <path
               fillRule="evenodd"

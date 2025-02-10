@@ -11,8 +11,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: "#FFDFDF",
-  border: "2px solid #000",
+  bgcolor: "#FFFFFF",
   boxShadow: 24,
   p: 4,
   position: "relative", // Added to enable positioning of the close button
@@ -42,8 +41,8 @@ export default function BasicModal({
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        className="bg-gray-100"
+     
       >
         <Box sx={style}>
           {/* Close button */}
