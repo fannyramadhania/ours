@@ -17,8 +17,8 @@ const FileUpload = ({ close }) => {
       const fileType = selectedFile.type;
 
       // Validasi file
-      if (fileSize > 400) {
-        setError("Ukuran file tidak boleh lebih dari 400KB");
+      if (fileSize > 600) {
+        setError("Ukuran file tidak boleh lebih dari 600KB");
         setFile(null);
       } else if (!["image/jpeg", "image/png"].includes(fileType)) {
         setError("File harus berupa gambar (JPG, PNG, JPEG)");
